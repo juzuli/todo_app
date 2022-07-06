@@ -10,11 +10,11 @@ class ApiHelper {
 
   ApiHelper.internal();
 
-  // ignore: constant_identifier_names
-  static const _BASE_URL = "https://alpha.classaccess.io/api/challenge/v1/";
+  static const String _baseUrl =
+      "https://alpha.classaccess.io/api/challenge/v1/";
 
   Future<ApiResponse> getData(String route) async {
-    String url = _BASE_URL + route;
+    String url = _baseUrl + route;
     try {
       Response response = await get(Uri.parse(url));
       if (response.statusCode == 200) {
@@ -28,7 +28,7 @@ class ApiHelper {
   }
 
   Future<ApiResponse> postData(String route, Map data) async {
-    String url = _BASE_URL + route;
+    String url = _baseUrl + route;
     try {
       Response response = await post(Uri.parse(url),
           body: jsonEncode(data),
@@ -47,7 +47,7 @@ class ApiHelper {
   }
 
   Future<ApiResponse> updateData(String route, Map data) async {
-    String url = _BASE_URL + route;
+    String url = _baseUrl + route;
     try {
       Response response = await put(Uri.parse(url), body: jsonEncode(data));
       if (response.statusCode == 200) {

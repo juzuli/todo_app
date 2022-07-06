@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:to_do_app/src/bloc/cubit/todos_cubit.dart';
 import 'package:to_do_app/src/constants/colors.dart';
@@ -19,10 +20,18 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   // DateTime _selectedDate = DateTime.now();
 
+  void fetchData() async{
+    await BlocProvider.of<TodosCubit>(context).fetchTodos();
+  }
+
+  @override
+  void initState() {
+    fetchData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<TodosCubit>(context).fetchTodos();
-
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -45,10 +54,28 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         BlocBuilder<TodosCubit, TodosState>(builder: (context, state) {
           if (state is TodosLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height - 217,
+              decoration: BoxDecoration(
+                color: AppColors.whiteSmokeColor,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
           } else if (state is TodosError) {
-            return const Center(
-              child: Icon(Icons.close),
+            return Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height - 217,
+              decoration: BoxDecoration(
+                color: AppColors.whiteSmokeColor,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Center(
+                child: Lottie.asset("assets/lottie/error.json",width: 300),
+              ),
             );
           } else if (state is TodosLoaded) {
             final todo = state.todos;
@@ -120,7 +147,8 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
           return Container();
-        }),
+        },
+        ),
       ],
     );
   }
